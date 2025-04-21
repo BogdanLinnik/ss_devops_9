@@ -33,16 +33,13 @@ pipeline {
       }
     }
     
-    stage('Налаштування бази даних') {
+    stage('Перевірка підключення до БД') {
       steps {
         withCredentials([usernamePassword(credentialsId: 'mysql-credentials', 
                                        usernameVariable: 'MYSQL_USER', 
                                        passwordVariable: 'MYSQL_PASSWORD')]) {
           sh """
-            mysql -h \$DB_HOST -u \$MYSQL_USER -p\$MYSQL_PASSWORD -e "CREATE DATABASE IF NOT EXISTS \$DB_NAME;"
-            if [ -f 'db/bloodbank.sql' ]; then
-              mysql -h \$DB_HOST -u \$MYSQL_USER -p\$MYSQL_PASSWORD \$DB_NAME < db/bloodbank.sql
-            fi
+            mysql -h \$DB_HOST -u \$MYSQL_USER -p\$MYSQL_PASSWORD -e "SELECT 1;" \$DB_NAME
           """
         }
       }

@@ -1,7 +1,9 @@
 version: '3.8'
 services:
   jenkins:
-    build: .
+    build: 
+      context: .
+      dockerfile: Dockerfile
     ports:
       - "8080:8080"
       - "50000:50000"
@@ -9,22 +11,28 @@ services:
       - jenkins_home:/var/jenkins_home
       - /var/run/docker.sock:/var/run/docker.sock
     container_name: jenkins
-    restart: unless-stopped
+    environment:
+      - DB_HOST=mysql
+      - DB_NAME=bloodbank
     networks:
       - jenkins-network
 
   mysql:
     image: mysql:5.7
     environment:
-      MYSQL_ROOT_PASSWORD: your_root_password
-      MYSQL_DATABASE: ${DB_NAME}
-    ports:
-      - "3306:3306"
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: bloodbank
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./db/bloodbank.sql:/docker-entrypoint-initdb.d/bloodbank.sql
     networks:
       - jenkins-network
 
-networks:
-  jenkins-network:
-
 volumes:
   jenkins_home:
+  mysql_data:
+
+networks:
+  jenkins-network:
