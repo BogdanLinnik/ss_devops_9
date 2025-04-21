@@ -10,6 +10,21 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     container_name: jenkins
     restart: unless-stopped
+    networks:
+      - jenkins-network
+
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: your_root_password
+      MYSQL_DATABASE: ${DB_NAME}
+    ports:
+      - "3306:3306"
+    networks:
+      - jenkins-network
+
+networks:
+  jenkins-network:
 
 volumes:
   jenkins_home:
