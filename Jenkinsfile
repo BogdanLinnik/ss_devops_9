@@ -51,14 +51,6 @@ pipeline {
           deleteDir()
           sh "cp -r \$WORKSPACE/client/* ."
         }
-        
-        configFileProvider([
-          configFile(fileId: 'php-config', 
-                   targetLocation: "${env.PROJECT_PATH}/config.php",
-                   variable: 'CONFIG_FILE')
-        ]) {
-          sh "chmod 644 ${env.PROJECT_PATH}/config.php"
-        }
       }
     }
     

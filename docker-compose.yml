@@ -10,6 +10,7 @@ services:
     volumes:
       - jenkins_home:/var/jenkins_home
       - /var/run/docker.sock:/var/run/docker.sock
+      - www_data:/var/www
     container_name: jenkins
     environment:
       - DB_HOST=mysql
@@ -33,6 +34,7 @@ services:
 volumes:
   jenkins_home:
   mysql_data:
+  www_data:
 
 networks:
   jenkins-network:

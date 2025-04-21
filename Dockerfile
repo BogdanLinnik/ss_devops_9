@@ -32,6 +32,11 @@ RUN apt-get update && \
 RUN curl -L "https://github.com/docker/compose/releases/download/v2.20.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && \
     chmod +x /usr/local/bin/docker-compose
 
+# Створення необхідних директорій та налаштування прав
+RUN mkdir -p /var/www/html && \
+    chown -R jenkins:jenkins /var/www && \
+    chmod -R 755 /var/www
+
 # Додавання jenkins користувача до docker групи
 RUN usermod -aG docker jenkins
 
